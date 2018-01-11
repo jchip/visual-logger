@@ -1,11 +1,8 @@
 language: node_js
 node_js:
-  - v4
   - v6
   - v8
 script: npm test
 notifications:
   email:
     - joel123@gmail.com
-before_install:
-  - if [[ `npm -v` == 2* ]]; then npm i -g npm@3; npm --version; fi
