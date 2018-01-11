@@ -159,7 +159,7 @@ describe("visual-logger", function() {
     it("should handle auto spinners", done => {
       visLog.addItem({ name: "T", spinner: VisualLogger.spinners[0], color: "blue" });
       setTimeout(() => {
-        expect(visList).to.deep.equal([
+        expect(visList.slice(0, 4)).to.deep.equal([
           "TEST_1: \n/ T: ",
           "TEST_1: \n- T: ",
           "TEST_1: \n\\ T: ",
@@ -183,22 +183,22 @@ describe("visual-logger", function() {
       visLog.addItem({ name: "T", spinner: VisualLogger.spinners[0], color: "blue" });
       visLog.updateItem("T", "foo");
       setTimeout(() => {
-        expect(visList).to.deep.equal(["TEST_1: \n| T: foo", "TEST_1: \n/ T: foo"]);
+        expect(visList.slice(0, 2)).to.deep.equal(["TEST_1: \n| T: foo", "TEST_1: \n/ T: foo"]);
         visLog.freezeItems();
         setTimeout(() => {
-          expect(visList).to.deep.equal(["TEST_1: \n| T: foo", "TEST_1: \n/ T: foo"]);
+          expect(visList.slice(0, 2)).to.deep.equal(["TEST_1: \n| T: foo", "TEST_1: \n/ T: foo"]);
           visLog.unfreezeItems();
           visLog.unfreezeItems();
           setTimeout(() => {
-            expect(visList).to.deep.equal([
+            expect(visList.slice(0, 3)).to.deep.equal([
               "TEST_1: \n| T: foo",
               "TEST_1: \n/ T: foo",
               "TEST_1: \n- T: foo"
             ]);
             done();
-          }, 100);
+          }, 115);
         }, 100);
-      }, 100);
+      }, 150);
     });
 
     it("should use display from data when updateItem", () => {
