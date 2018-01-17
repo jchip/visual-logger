@@ -68,15 +68,23 @@ describe("visual-logger", function() {
     let vis;
     let visList;
     let visLog;
-    const make = () => {
+    const make = maxDots => {
       out = [];
       clearCount = 0;
       vis = undefined;
       visList = [];
 
       return new VisualLogger({
+        maxDots,
         output: {
-          write: x => out.push(x),
+          write: x => {
+            const l = out[out.length - 1];
+            if (!l || l.endsWith("\n")) {
+              out.push(x);
+              return;
+            }
+            out[out.length - 1] += x;
+          },
           visual: {
             write: x => {
               vis = x;
@@ -206,7 +214,7 @@ describe("visual-logger", function() {
       visLog.setItemType("simple");
       visLog.updateItem("T", "hello world");
       visLog.freezeItems(true);
-      expect(out).to.deep.equal([".", "TEST_1: \nT: hello world\n"]);
+      expect(out).to.deep.equal([".\n", "TEST_1: \nT: hello world\n"]);
     });
 
     it("should use display from data when updateItem", () => {
@@ -229,14 +237,20 @@ describe("visual-logger", function() {
     });
 
     it("should log dots if item type is simple", () => {
+      visLog = make(10);
+      visLog.addItem(itemOpt);
       visLog.setItemType("simple");
       visLog.updateItem("TEST_1", "hello");
       expect(out).to.deep.equal(["."]);
       expect(visList).to.deep.equal([]);
       out = [];
       visLog.clearItems();
-      expect(out).to.deep.equal(["\n"]);
+      expect(out).to.deep.equal([]);
       expect(visList).to.deep.equal([]);
+      for (let i = 0; i < 15; i++) {
+        visLog.updateItem("TEST_1", `${i}`);
+      }
+      expect(out).to.deep.equal([".........\n", "......"]);
     });
 
     it("should not save to log data if flag is false", () => {
