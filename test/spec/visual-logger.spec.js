@@ -201,6 +201,14 @@ describe("visual-logger", function() {
       }, 150);
     });
 
+    it("should freeze items and show correct current render when item type is simple", () => {
+      visLog.addItem({ name: "T", spinner: VisualLogger.spinners[0], color: "blue" });
+      visLog.setItemType("simple");
+      visLog.updateItem("T", "hello world");
+      visLog.freezeItems(true);
+      expect(out).to.deep.equal([".", "TEST_1: \nT: hello world\n"]);
+    });
+
     it("should use display from data when updateItem", () => {
       update1();
       visLog.updateItem("TEST_1", { msg: "foo", display: "bar" });
