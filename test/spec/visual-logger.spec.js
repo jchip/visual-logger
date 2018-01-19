@@ -68,35 +68,40 @@ describe("visual-logger", function() {
     let vis;
     let visList;
     let visLog;
-    const make = maxDots => {
+    const make = opts => {
       out = [];
       clearCount = 0;
       vis = undefined;
       visList = [];
 
-      return new VisualLogger({
-        maxDots,
-        output: {
-          write: x => {
-            const l = out[out.length - 1];
-            if (!l || l.endsWith("\n")) {
-              out.push(x);
-              return;
+      return new VisualLogger(
+        Object.assign(
+          {
+            updatesPerDot: 1,
+            output: {
+              write: x => {
+                const l = out[out.length - 1];
+                if (!l || l.endsWith("\n")) {
+                  out.push(x);
+                  return;
+                }
+                out[out.length - 1] += x;
+              },
+              visual: {
+                write: x => {
+                  vis = x;
+                  visList.push(x);
+                },
+                clear: () => {
+                  vis = undefined;
+                  clearCount++;
+                }
+              }
             }
-            out[out.length - 1] += x;
           },
-          visual: {
-            write: x => {
-              vis = x;
-              visList.push(x);
-            },
-            clear: () => {
-              vis = undefined;
-              clearCount++;
-            }
-          }
-        }
-      });
+          opts
+        )
+      );
     };
 
     const itemOpt = { name: "TEST_1", color: "blue" };
@@ -237,7 +242,7 @@ describe("visual-logger", function() {
     });
 
     it("should log dots if item type is simple", () => {
-      visLog = make(10);
+      visLog = make({ maxDots: 10 });
       visLog.addItem(itemOpt);
       visLog.setItemType("simple");
       visLog.updateItem("TEST_1", "hello");
@@ -251,6 +256,23 @@ describe("visual-logger", function() {
         visLog.updateItem("TEST_1", `${i}`);
       }
       expect(out).to.deep.equal([".........\n", "......"]);
+    });
+
+    it("should log less dots if updatesPerDot is > 1", () => {
+      visLog = make({ maxDots: 10, updatesPerDot: undefined });
+      visLog.addItem(itemOpt);
+      visLog.setItemType("simple");
+      visLog.updateItem("TEST_1", "hello");
+      expect(out).to.deep.equal([]);
+      expect(visList).to.deep.equal([]);
+      out = [];
+      visLog.clearItems();
+      expect(out).to.deep.equal([]);
+      expect(visList).to.deep.equal([]);
+      for (let i = 0; i < 15; i++) {
+        visLog.updateItem("TEST_1", `${i}`);
+      }
+      expect(out).to.deep.equal(["..."]);
     });
 
     it("should not save to log data if flag is false", () => {
