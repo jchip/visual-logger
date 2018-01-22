@@ -13,7 +13,7 @@ describe("visual-logger", function() {
   it("should log messages", () => {
     let out = [];
     const visLog = new VisualLogger({ output: { write: x => out.push(x) } });
-    visLog.log("log debug msg");
+    visLog.log("log info msg");
     visLog.debug("debug msg");
     visLog.verbose("verbose msg");
     visLog.info("info msg");
@@ -21,7 +21,7 @@ describe("visual-logger", function() {
     visLog.error("error msg");
     visLog.fyi("fyi msg");
     expect(visLog.logData).to.deep.equal([
-      "> log debug msg",
+      "> log info msg",
       "> debug msg",
       "> verbose msg",
       "> info msg",
@@ -30,7 +30,7 @@ describe("visual-logger", function() {
       "> fyi msg"
     ]);
 
-    expect(out).to.deep.equal(["> info msg\n", "> warn msg\n", "> error msg\n", "> fyi msg\n"]);
+    expect(out).to.deep.equal(["> log info msg\n", "> info msg\n", "> warn msg\n", "> error msg\n", "> fyi msg\n"]);
     out = [];
     visLog
       .prefix("!")
