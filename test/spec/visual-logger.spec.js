@@ -30,7 +30,13 @@ describe("visual-logger", function() {
       "> fyi msg"
     ]);
 
-    expect(out).to.deep.equal(["> log info msg\n", "> info msg\n", "> warn msg\n", "> error msg\n", "> fyi msg\n"]);
+    expect(out).to.deep.equal([
+      "> log info msg\n",
+      "> info msg\n",
+      "> warn msg\n",
+      "> error msg\n",
+      "> fyi msg\n"
+    ]);
     out = [];
     visLog
       .prefix("!")
@@ -281,6 +287,15 @@ describe("visual-logger", function() {
       visLog.addItem({ name: "B", save: false });
       visLog.updateItem("B", "hello");
       expect(visList).to.deep.equal(["TEST_1: blah", "TEST_1: blah\nB: hello"]);
+      expect(visLog.logData).to.deep.equal([]);
+    });
+
+    it("should render if _render flag is false", () => {
+      visLog.updateItem("TEST_1", { msg: "blah", _save: false, _render: false });
+      expect(visLog.logData).to.deep.equal([]);
+      visLog.addItem({ name: "B", save: false });
+      visLog.updateItem("B", "hello");
+      expect(visList).to.deep.equal(["TEST_1: \nB: hello"]);
       expect(visLog.logData).to.deep.equal([]);
     });
   });
