@@ -35,7 +35,8 @@
     "log-update": "^2.3.0"
   },
   "devDependencies": {
-    "electrode-archetype-njs-module-dev": "^3.0.0"
+    "electrode-archetype-njs-module-dev": "^3.0.0",
+    "prettier": "^1.19.1"
   },
   "nyc": {
     "all": true,
@@ -58,5 +59,8 @@
     "functions": 100,
     "lines": 100,
     "cache": true
+  },
+  "prettier": {
+    "printWidth": 100
   }
 }
