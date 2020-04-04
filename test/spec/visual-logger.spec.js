@@ -192,6 +192,37 @@ describe("visual-logger", function() {
       }, 500);
     });
 
+    it("should handle spinner being true", done => {
+      const spinner = VisualLogger.spinners[1];
+      visLog.addItem({ name: "T", spinner: true, color: "blue" });
+      setTimeout(() => {
+        const expected = [`TEST_1: \n${spinner[0]} T: `];
+        expect(visList.slice(0, 1)).to.deep.equal(expected);
+        visLog.removeItem("T");
+        visList = [];
+        visLog.updateItem("TEST_1", { msg: "1" });
+        expect(visList).to.deep.equal(["TEST_1: 1"]);
+        done();
+      }, 150);
+    });
+
+    it("should handle spinner being a valid index", done => {
+      const spinner = VisualLogger.spinners[2];
+      const opts = { name: "T", spinner: 2, color: "blue" };
+      visLog.addItem(opts);
+      setTimeout(() => {
+        // well, we have a bit of a start off-by-1 issue, but whatever, it's just
+        // circular spinning
+        const expected = [`TEST_1: \n${spinner[1]} T: `];
+        expect(visList.slice(0, 1)).to.deep.equal(expected);
+        visLog.removeItem("T");
+        visList = [];
+        visLog.updateItem("TEST_1", { msg: "1" });
+        expect(visList).to.deep.equal(["TEST_1: 1"]);
+        done();
+      }, 150);
+    });
+
     it("should not start spinner if item type is not normal", () => {
       visLog.setItemType("simple");
       visLog.addItem({ name: "S", spinner: "[]" });
@@ -199,6 +230,7 @@ describe("visual-logger", function() {
     });
 
     it("should freeze/unfreeze items", done => {
+      visList = [];
       visLog.addItem({ name: "T", spinner: VisualLogger.spinners[0], color: "blue" });
       visLog.updateItem("T", "foo");
       setTimeout(() => {
