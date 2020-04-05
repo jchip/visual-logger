@@ -10,6 +10,9 @@
     "type": "git",
     "url": "https://github.com/jchip/visual-logger.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "keywords": [
     "visual",
     "cli",
@@ -27,6 +30,9 @@
     "spinner",
     "animation",
     "refresh"
+  ],
+  "files": [
+    "lib"
   ],
   "author": "Joel Chen <joel123@gmail.com>",
   "license": "Apache-2.0",
