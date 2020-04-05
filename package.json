@@ -1,6 +1,6 @@
 {
   "name": "visual-logger",
-  "version": "0.1.10",
+  "version": "1.0.0",
   "description": "Visual logger for CLI in NodeJS",
   "main": "lib/visual-logger.js",
   "scripts": {
