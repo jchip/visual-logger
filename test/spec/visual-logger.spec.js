@@ -1,18 +1,18 @@
 "use strict";
 
 const chalk = require("chalk");
-chalk.enabled = false;
 const VisualLogger = require("../..");
 
 describe("visual-logger", function() {
-  it("should init", () => {
+  it("should init with default color setting to true", () => {
     const visLog = new VisualLogger();
     expect(visLog._output).to.exist;
+    expect(visLog.color).equal(true);
   });
 
   it("should log messages", () => {
     let out = [];
-    const visLog = new VisualLogger({ output: { write: x => out.push(x) } });
+    const visLog = new VisualLogger({ color: false, output: { write: x => out.push(x) } });
     visLog.log("log info msg");
     visLog.debug("debug msg");
     visLog.verbose("verbose msg");
@@ -50,20 +50,27 @@ describe("visual-logger", function() {
   it("should allow changing default prefix", () => {
     const out = [];
     const visLog = new VisualLogger({
+      color: false,
       output: { write: x => out.push(x) }
     });
     visLog.setPrefix("-").info("blah");
     expect(out).to.deep.equal(["-blah\n"]);
   });
 
-  it("should reset color prefix when chalk enabled changes", () => {
+  it("should reset color prefix when color flag changes", () => {
     const out = [];
-    const visLog = new VisualLogger({ output: { write: x => out.push(x) } });
+    const visLog = new VisualLogger({ color: false, output: { write: x => out.push(x) } });
     expect(visLog._colorPrefix.debug).to.equal("> ");
-    chalk.enabled = true;
+    visLog.color = true;
+    const saveLevel = chalk.level;
+    chalk.level = 0;
+    visLog.log("hello");
+    expect(visLog._colorPrefix.debug).to.equal("> ");
+    chalk.level = saveLevel;
     visLog.log("hello");
     expect(visLog._colorPrefix.debug).to.not.equal("> ");
-    chalk.enabled = false;
+    visLog.color = false;
+    chalk.level = saveLevel;
     visLog.log("hello");
     expect(visLog._colorPrefix.debug).to.equal("> ");
   });
@@ -83,6 +90,7 @@ describe("visual-logger", function() {
       return new VisualLogger(
         Object.assign(
           {
+            color: false,
             updatesPerDot: 1,
             output: {
               write: x => {

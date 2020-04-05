@@ -31,7 +31,7 @@
   "author": "Joel Chen <joel123@gmail.com>",
   "license": "Apache-2.0",
   "dependencies": {
-    "chalk": "^2.3.0",
+    "chalk": "^4.0.0",
     "log-update": "^4.0.0"
   },
   "devDependencies": {
