@@ -42,7 +42,9 @@
   },
   "devDependencies": {
     "electrode-archetype-njs-module-dev": "^3.0.0",
-    "prettier": "^1.19.1"
+    "prettier": "^2.0.4",
+    "run-verify": "^1.2.4",
+    "xaa": "^1.4.0"
   },
   "nyc": {
     "all": true,
@@ -67,6 +69,8 @@
     "cache": true
   },
   "prettier": {
-    "printWidth": 100
+    "printWidth": 100,
+    "trailingComma": "none",
+    "arrowParens": "avoid"
   }
 }
