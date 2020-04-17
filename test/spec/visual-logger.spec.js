@@ -5,7 +5,7 @@ const VisualLogger = require("../..");
 const { asyncVerify } = require("run-verify");
 const { delay } = require("xaa");
 
-describe("visual-logger", function() {
+describe("visual-logger", function () {
   it("should init with default color setting to true", () => {
     const visLog = new VisualLogger();
     expect(visLog._output).to.exist;
@@ -40,12 +40,7 @@ describe("visual-logger", function() {
       "> fyi msg\n"
     ]);
     out = [];
-    visLog
-      .prefix("!")
-      .fyi("a")
-      .prefix(false)
-      .fyi("b")
-      .fyi("c");
+    visLog.prefix("!").fyi("a").prefix(false).fyi("b").fyi("c");
     expect(out).to.deep.equal(["!a\n", "b\n", "> c\n"]);
   });
 
@@ -77,7 +72,7 @@ describe("visual-logger", function() {
     expect(visLog._colorPrefix.debug).to.equal("> ");
   });
 
-  describe("visual item", function() {
+  describe("visual item", function () {
     let out = [];
     let clearCount = 0;
     let vis;
@@ -168,10 +163,7 @@ describe("visual-logger", function() {
     });
 
     it("should handle update visual item", () => {
-      visLog
-        .addItem(itemOpt)
-        .updateItem("foo")
-        .updateItem("TEST_1", "hello");
+      visLog.addItem(itemOpt).updateItem("foo").updateItem("TEST_1", "hello");
       return asyncVerify(
         () => delay(120),
         () => {
